@@ -1,5 +1,5 @@
-from poetry_indirect_import_detector import __version__
+from importlib.metadata import Distribution
 
 
 def test_version() -> None:
-    assert __version__ == "0.1.0"
+    assert Distribution.from_name("poetry_indirect_import_detector").version == "0.1.0"
