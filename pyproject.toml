@@ -15,4 +15,5 @@ packages = [
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
+pysen = {version = "^0.9.1", extras = ["lint"]}
 pytest = "^5.2"
