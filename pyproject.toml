@@ -11,6 +11,9 @@ packages = [
     {from = "src", include = "poetry_indirect_import_detector"},
 ]
 
+[tool.poetry.scripts]
+poetry_indirect_import_detector = "poetry_indirect_import_detector.main:_main"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 
