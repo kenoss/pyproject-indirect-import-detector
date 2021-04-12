@@ -108,19 +108,21 @@ class _PyProject:
             paths_ = ["tests"]
             paths = [Path(path) for path in paths_]
         else:
-            packages_ = _dict_rec_get(self._t, ["tool", "poetry", "packages"], None)
-            if packages_ is None:
+            packages__ = _dict_rec_get(self._t, ["tool", "poetry", "packages"], None)
+            packages_ = [] if packages__ is None else packages__
+            # fmt: off
+            packages = [x for x in packages_
+                        # Shoud we check `type(x) is ...`?
+                        if ("from" in x) and ("include" in x)]
+            if len(packages) == 0:
                 # Case: Module is `<package_name>`
 
                 paths = [Path(self._project_name())]
             else:
                 # Case: Modules are `src/<module>`
 
-                # FIXME
-                paths = [Path(x["from"]) / x["include"] for x in packages_]
+                paths = [Path(x["from"]) / x["include"] for x in packages]
 
-        # FIXME
-        assert len(paths) > 0
         return paths
 
     def target_dirs(self, dev: bool) -> List[Path]:
