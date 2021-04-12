@@ -92,7 +92,6 @@ class _Detector(ast.NodeVisitor):
         self._validate(module, node, line)
 
 
-# TODO: Check that this does work well encoding agnostic.
 def _get_source(source: List[str], node: Any) -> str:
     lines = source[node.lineno - 1 : node.end_lineno]
     lines[-1] = lines[-1][: node.end_col_offset]
