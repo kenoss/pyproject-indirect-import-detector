@@ -22,6 +22,9 @@ stdlib-list = "^0.8.0"
 toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]
+Pillow = "^8.2.0"
+PyGObject = "^3.40.1"
+actfw-core = "^1.5.2"
 pysen = {version = "^0.9.1", extras = ["lint"]}
 pytest = "^5.2"
 
