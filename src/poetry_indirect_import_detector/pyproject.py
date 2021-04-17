@@ -39,8 +39,9 @@ class _PyProject:
         return Ok(None)
 
     @classmethod
-    def load(cls) -> Result["_PyProject", InvalidPyProjectError]:
-        t = toml.load(open("pyproject.toml"))
+    def load(cls, path: Path) -> Result["_PyProject", InvalidPyProjectError]:
+        path = path / "pyproject.toml"
+        t = toml.load(open(path))
         this = cls(t)
         res = this._init_validate()
         if res.is_err():

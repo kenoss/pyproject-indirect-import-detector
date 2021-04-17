@@ -1,7 +1,7 @@
 import ast
 import sys
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from .detector import _Detector, _IllegalImportDetected, _read_file
 from .pyproject import _PyProject
@@ -45,8 +45,11 @@ def _merge_results(  # type: ignore  # Missing return statement ...why?
                 return result
 
 
-def _main() -> None:
-    pyproject_ = _PyProject.load()
+def _main(root: Optional[Path] = None) -> None:
+    if root is None:
+        root = Path()
+
+    pyproject_ = _PyProject.load(root)
     if pyproject_.is_err():
         raise pyproject_.unwrap_err()
     pyproject = pyproject_.unwrap()
