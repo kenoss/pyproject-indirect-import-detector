@@ -7,9 +7,11 @@ CASES_DIR = Path(__file__).parent / "case"
 CASES = list(CASES_DIR.iterdir())
 
 
-def run(root: Path) -> Tuple[bool, str]:
+def run(root: Path, v: bool) -> Tuple[bool, str]:
     os.chdir(root)
     command = ["python", "-m", "poetry_indirect_import_detector"]
+    if v:
+        command.append("-v")
     p = subprocess.run(
         command,
         text=True,
@@ -22,23 +24,30 @@ def run(root: Path) -> Tuple[bool, str]:
 
 def test_output_self() -> None:
     root = Path()
-    ok, _ = run(root)
-    assert ok
+
+    for v in [False, True]:
+        ok, _ = run(root, v)
+        assert ok
 
 
 def aux(root: Path) -> None:
-    ok, err = run(root)
-    if root.name.startswith("ok_"):
-        assert ok
-    elif root.name.startswith("ng_"):
-        error_path = root / "error.txt"
-        with open(error_path, "r") as f:
-            error_output = f.read()
+    for v in [False, True]:
+        if v:
+            output_path = root / "output-v.txt"
+        else:
+            output_path = root / "output.txt"
 
-        assert not ok
-        assert err == error_output
-    else:
-        raise RuntimeError("unreachable")
+        with open(output_path, "r") as f:
+            output_expect = f.read()
+
+        ok, output_got = run(root, v)
+        if root.name.startswith("ok_"):
+            assert ok
+        elif root.name.startswith("ng_"):
+            assert not ok
+            assert output_got == output_expect
+        else:
+            raise RuntimeError("unreachable")
 
 
 def test_output() -> None:
@@ -47,12 +56,15 @@ def test_output() -> None:
 
 
 def gen(root: Path) -> None:
-    error_path = root / "error.txt"
+    for v in [False, True]:
+        if v:
+            output_path = root / "output-v.txt"
+        else:
+            output_path = root / "output.txt"
 
-    ok, err = run(root)
-    if not ok:
-        with open(error_path, "w") as f:
-            f.write(err)
+        _, output = run(root, v)
+        with open(output_path, "w") as f:
+            f.write(output)
 
 
 def generate_error_txts() -> None:
