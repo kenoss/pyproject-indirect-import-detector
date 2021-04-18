@@ -6,4 +6,8 @@ Error:
     src/hoge/__main__.py:4: import PIL
     PIL is imported, but not in dependency.
 
+Error:
+    src/hoge/__main__.py:5: from PIL.Image import Image
+    PIL is imported, but not in dependency.
+
 [32m[OK][0m src/hoge/__init__.py

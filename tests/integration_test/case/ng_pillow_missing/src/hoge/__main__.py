@@ -2,6 +2,7 @@ from pathlib import Path
 
 import actfw_core
 import PIL
+from PIL.Image import Image  # noqa F401
 
 IMAGE_PATH = Path(__file__) / "dummy.png"
 
