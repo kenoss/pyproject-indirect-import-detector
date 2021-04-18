@@ -371,6 +371,14 @@ python-versions = "*"
 develop = ["sphinx"]
 
 [[package]]
+name = "termcolor"
+version = "1.1.0"
+description = "ANSII Color formatting for output in terminal."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -421,7 +429,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "a442d47967aeea2c74b82c85db53f752f773c2ee4ce835886cae6f09dca7708b"
+content-hash = "10f3bd0abda2ba61d6402bc68512c9ed829bc3feed4a5269d1b1008028945ea1"
 
 [metadata.files]
 actfw-core = [
@@ -646,6 +654,9 @@ smmap = [
 stdlib-list = [
     {file = "stdlib-list-0.8.0.tar.gz", hash = "sha256:a1e503719720d71e2ed70ed809b385c60cd3fb555ba7ec046b96360d30b16d9f"},
     {file = "stdlib_list-0.8.0-py3-none-any.whl", hash = "sha256:2ae0712a55b68f3fbbc9e58d6fa1b646a062188f49745b495f94d3310a9fdd3e"},
+]
+termcolor = [
+    {file = "termcolor-1.1.0.tar.gz", hash = "sha256:1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
