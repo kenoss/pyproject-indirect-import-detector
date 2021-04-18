@@ -1,0 +1,162 @@
+version: 2.1
+
+references:
+  python-versions: &python-versions ["3.9"]
+
+commands:
+  setup-python-environment:
+    steps:
+      - run:
+          command: |
+            apt-get update -y
+            apt-get install -y --no-install-recommends libgirepository1.0-dev
+
+            curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+            echo 'export PATH=$HOME/.poetry/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+  poetry-install:
+    steps:
+      - restore_cache:
+          key: &cache-key-poetry cache-poetry-{{ .Environment.CIRCLECI_CACHE_VERSION }}-{{ checksum "poetry.lock" }}
+      - run:
+          name: "`poetry install`"
+          command: |
+            poetry config virtualenvs.in-project true
+            poetry install
+      - save_cache:
+          key: *cache-key-poetry
+          paths:
+            - ".venv"
+  poetry-install-without-cache:
+    steps:
+      - run:
+          name: "`poetry install`"
+          command: |
+            poetry config virtualenvs.in-project true
+            poetry install
+
+jobs:
+  lint:
+    docker:
+      - image: python:3-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - poetry-install
+      - run:
+          name: Lint
+          command: |
+            poetry run pysen run lint
+  test:
+    parameters:
+      python-version:
+        type: string
+    docker:
+      - image: python:<<parameters.python-version>>-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - poetry-install
+      - run:
+          name: Test
+          command: |
+            poetry run pytest -v
+  test-with-up-to-date-dependencies:
+    parameters:
+      python-version:
+        type: string
+    docker:
+      - image: python:<<parameters.python-version>>-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - run: |
+          rm poetry.lock
+      - poetry-install-without-cache
+      - run:
+          name: Test
+          command: |
+            poetry run pytest -v
+  build:
+    docker:
+      - image: python:3-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - poetry-install
+      - run: |
+          poetry build
+      - store_artifacts:
+          path: dist
+          destination: dist
+  validate-tag-with-version:
+    docker:
+      - image: python:3-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - poetry-install
+      - run:
+          name: Check if git tag name is appropriate for package version
+          command: |
+            tag=$CIRCLE_TAG
+            version=$(poetry run python -c 'from importlib.metadata import Distribution; print(Distribution.from_name("pyproject-indirect-import-detector").version)')
+            test "$tag" = "$version"
+  deploy:
+    docker:
+      - image: python:3-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - poetry-install
+      - run:
+          name: Publish wheel & sdist to PyPI
+          command: |
+            poetry build
+            poetry publish --username "__token__" --password "$PYPI_API_TOKEN" --no-interaction
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - lint
+      - test:
+          matrix:
+            parameters:
+              python-version: *python-versions
+      - build
+  release:
+    jobs:
+      - validate-tag-with-version:
+          filters: &release-filter
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+(\.[0-9]+){2}((a|b|rc)[0-9]+)?(.post[0-9])?(.dev[0-9])?$/
+      - build:
+          filters: *release-filter
+          requires:
+            - validate-tag-with-version
+      - deploy:
+          filters: *release-filter
+          requires:
+            - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "31 23 * * *"  # in UTC
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - lint
+      - test:
+          matrix:
+            parameters:
+              python-version: *python-versions
+      - test-with-up-to-date-dependencies:
+          matrix:
+            parameters:
+              python-version: *python-versions
+      - build
