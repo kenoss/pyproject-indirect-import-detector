@@ -1,0 +1,4 @@
+Error:
+    src/hoge/__main__.py:4: import PIL
+    PIL is imported, but not in dependency.
+
