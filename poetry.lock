@@ -429,7 +429,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "10f3bd0abda2ba61d6402bc68512c9ed829bc3feed4a5269d1b1008028945ea1"
+content-hash = "73d0a58866fd148d1f0898e1e5e4dfc3d9f7cf5a86d04858363642871a3738c3"
 
 [metadata.files]
 actfw-core = [

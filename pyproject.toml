@@ -18,6 +18,7 @@ pyproject-indirect-import-detector = "pyproject_indirect_import_detector.main:_m
 python = "^3.9"
 
 result = "^0.6.0"
+setuptools = "^56.0.0"
 stdlib-list = "^0.8.0"
 termcolor = "^1.1.0"
 toml = "^0.10.2"
