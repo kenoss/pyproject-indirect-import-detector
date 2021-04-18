@@ -12,14 +12,15 @@ if True:
 
 
 from pathlib import Path
-from typing import Any, List, MutableMapping, cast
+from typing import Any, List, MutableMapping, Tuple, cast
 
 import toml
+from pkg_resources import to_filename
 
 from .domain import _load_proj_to_modules
 from .exception import InvalidPyProjectError, InvalidPythonVersionError
 from .result import Err, Ok, Result
-from .util import _dict_rec_get
+from .util import _dict_rec_get, _flatten
 
 
 class _PyProject:
@@ -52,6 +53,23 @@ class _PyProject:
         ret = self._t["tool"]["poetry"]["name"]
         assert type(ret) is str
         return cast(str, ret)
+
+    def _project_name_normalized(self) -> str:
+        return to_filename(self._project_name())
+
+    def _module_names(self) -> List[str]:
+        packages = [x for (x, _) in self._packages_in_src()]
+        return sorted(list(set(_flatten([[self._project_name_normalized()], packages]))))
+
+    def _packages_in_src(self) -> List[Tuple[str, Path]]:
+        packages__ = _dict_rec_get(self._t, ["tool", "poetry", "packages"], None)
+        packages_ = [] if packages__ is None else packages__
+        # fmt: off
+        packages = [(x["include"], Path(x["from"]) / x["include"])
+                    for x in packages_
+                    # Shoud we check `type(x) is ...`?
+                    if ("from" in x) and ("include" in x)]
+        return packages
 
     def base_python_version(self) -> Result[str, InvalidPythonVersionError]:
         python_version_constraint = _dict_rec_get(self._t, ["tool", "poetry", "dependencies", "python"], None)
@@ -89,7 +107,12 @@ class _PyProject:
             return Err(python_version_.unwrap_err())
         python_version = python_version_.unwrap()
 
-        proj_to_modules_ = _load_proj_to_modules(self._project_name(), self.dependencies(dev), python_version)
+        proj_to_modules_ = _load_proj_to_modules(
+            self._project_name(),
+            self._module_names(),
+            self.dependencies(dev),
+            python_version,
+        )
         if proj_to_modules_.is_err():
             return Err(proj_to_modules_.unwrap_err())
         proj_to_modules = proj_to_modules_.unwrap()
@@ -109,20 +132,15 @@ class _PyProject:
             paths_ = ["tests"]
             paths = [Path(path) for path in paths_]
         else:
-            packages__ = _dict_rec_get(self._t, ["tool", "poetry", "packages"], None)
-            packages_ = [] if packages__ is None else packages__
-            # fmt: off
-            packages = [x for x in packages_
-                        # Shoud we check `type(x) is ...`?
-                        if ("from" in x) and ("include" in x)]
+            packages = self._packages_in_src()
             if len(packages) == 0:
                 # Case: Module is `<package_name>`
 
-                paths = [Path(self._project_name())]
+                paths = [Path(self._project_name_normalized())]
             else:
                 # Case: Modules are `src/<module>`
 
-                paths = [Path(x["from"]) / x["include"] for x in packages]
+                paths = [x for (_, x) in packages]
 
         return paths
 

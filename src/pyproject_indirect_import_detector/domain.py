@@ -48,6 +48,7 @@ def _get_modules_by_files(dist: Distribution) -> List[str]:
 
 def _load_proj_to_modules(
     self_project_name: str,
+    self_module_names: List[str],
     project_names: List[str],
     python_version: str,
 ) -> Result[dict[str, List[str]], InvalidPythonVersionError]:  # type: ignore  # reason: dict
@@ -59,6 +60,6 @@ def _load_proj_to_modules(
 
     proj_to_modules_std = {"std": modules_std}
     proj_to_modules_dep = dict((proj, _get_modules(proj)) for proj in project_names)
-    proj_to_modules_self = {self_project_name: [self_project_name]}
+    proj_to_modules_self = {self_project_name: self_module_names}
     proj_to_modules = {**proj_to_modules_std, **proj_to_modules_dep, **proj_to_modules_self}
     return Ok(proj_to_modules)
