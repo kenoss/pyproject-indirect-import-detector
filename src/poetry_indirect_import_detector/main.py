@@ -1,7 +1,10 @@
+import argparse
 import ast
 import sys
 from pathlib import Path
 from typing import List, Optional, Tuple
+
+from termcolor import colored
 
 from .detector import _Detector, _IllegalImportDetected, _read_file
 from .pyproject import _PyProject
@@ -38,10 +41,7 @@ def _detect(pyproject: _PyProject, dev: bool) -> Result[List[Tuple[Path, List[_I
     return Ok(ret)
 
 
-def _main(root: Optional[Path] = None) -> None:
-    if root is None:
-        root = Path()
-
+def _main_aux(args: argparse.Namespace, root: Path) -> None:
     pyproject_ = _PyProject.load(root)
     if pyproject_.is_err():
         raise pyproject_.unwrap_err()
@@ -55,10 +55,33 @@ def _main(root: Optional[Path] = None) -> None:
         raise res_dev.unwrap_err()
     else:
         xs = _flatten([res.unwrap(), res_dev.unwrap()])
-        if all([len(es) == 0 for (_, es) in xs]):
-            print("OK")
-        else:
-            for (_, es) in xs:
+        ok = all([len(es) == 0 for (_, es) in xs])
+        ok_or_ng = colored("OK", "green") if ok else colored("NG", "red")
+        print(f"Checking {len(xs)} files... {ok_or_ng}")
+        print("")
+
+        for (path, es) in xs:
+            if len(es) == 0:
+                if args.v:
+                    print(f"{colored('[OK]', 'green')} {path}")
+            else:
+                if args.v:
+                    print(f"{colored('[NG]', 'red')} {path}")
+                    print("")
+
                 for e in es:
                     print(e)
+
+        if not ok:
             sys.exit(1)
+
+
+def _main(root: Optional[Path] = None) -> None:
+    parser = argparse.ArgumentParser(description="Detect indirect import")
+    parser.add_argument("-v", type=bool, nargs="?", const=True, default=False, help="Make output verbose.")
+    args = parser.parse_args()
+
+    if root is None:
+        root = Path()
+
+    _main_aux(args, root)
