@@ -1,6 +1,6 @@
 from importlib.metadata import Distribution
 
-from poetry_indirect_import_detector.domain import _get_modules_by_files, _get_modules_by_toplevel_txt
+from pyproject_indirect_import_detector.domain import _get_modules_by_files, _get_modules_by_toplevel_txt
 
 PACKAGES = [
     "pysen",

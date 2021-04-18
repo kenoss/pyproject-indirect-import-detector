@@ -2,7 +2,7 @@ import ast
 from pathlib import Path
 from typing import List
 
-from poetry_indirect_import_detector.detector import _Detector, _IllegalImportDetected
+from pyproject_indirect_import_detector.detector import _Detector, _IllegalImportDetected
 
 
 def aux_detect(s: str, module_to_proj=None) -> List[_IllegalImportDetected]:

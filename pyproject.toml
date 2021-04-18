@@ -3,16 +3,16 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "poetry_indirect_import_detector"
+name = "pyproject-indirect-import-detector"
 version = "0.1.0"
 description = ""
 authors = ["keno <keno.ss57@gmail.com>"]
 packages = [
-    {from = "src", include = "poetry_indirect_import_detector"},
+    {from = "src", include = "pyproject_indirect_import_detector"},
 ]
 
 [tool.poetry.scripts]
-poetry_indirect_import_detector = "poetry_indirect_import_detector.main:_main"
+pyproject-indirect-import-detector = "pyproject_indirect_import_detector.main:_main"
 
 [tool.poetry.dependencies]
 python = "^3.9"

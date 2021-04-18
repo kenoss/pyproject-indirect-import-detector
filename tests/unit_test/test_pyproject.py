@@ -1,9 +1,9 @@
 from pathlib import Path
 
 import toml
-from poetry_indirect_import_detector.exception import InvalidPyProjectError
-from poetry_indirect_import_detector.pyproject import _parse_minimal_python_verison, _PyProject
-from poetry_indirect_import_detector.result import Err, Ok, Result
+from pyproject_indirect_import_detector.exception import InvalidPyProjectError
+from pyproject_indirect_import_detector.pyproject import _parse_minimal_python_verison, _PyProject
+from pyproject_indirect_import_detector.result import Err, Ok, Result
 
 
 def test_parse_minimal_python_version() -> None:

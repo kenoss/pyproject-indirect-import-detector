@@ -9,7 +9,7 @@ CASES = list(CASES_DIR.iterdir())
 
 def run(root: Path, v: bool) -> Tuple[bool, str]:
     os.chdir(root)
-    command = ["python", "-m", "poetry_indirect_import_detector"]
+    command = ["python", "-m", "pyproject_indirect_import_detector"]
     if v:
         command.append("-v")
     p = subprocess.run(
