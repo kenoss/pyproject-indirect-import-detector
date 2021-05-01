@@ -62,18 +62,16 @@ def gen(root: Path) -> None:
         else:
             output_path = root / "output.txt"
 
+        print(f"Generating {output_path} ...")
         _, output = run(root, v)
         with open(output_path, "w") as f:
             f.write(output)
+        print(f"Generating {output_path} ... done")
 
 
 def generate_error_txts() -> None:
-    print(f"Generating {CASES_DIR}/*/error.txt ...")
-
     for case_root in CASES:
         gen(case_root)
-
-    print(f"Generating {CASES_DIR}/*/error.txt ... done")
 
 
 if __name__ == "__main__":
