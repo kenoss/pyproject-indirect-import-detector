@@ -30,6 +30,7 @@ def _detect(pyproject: _PyProject, dev: bool) -> Result[List[Tuple[Path, List[_I
 
     paths = pyproject.target_dirs(dev)
     paths = _flatten([_list_all_python_files(path) for path in paths])
+    paths.sort()
 
     ret = []
     for path in paths:
