@@ -9,7 +9,7 @@ commands:
       - run:
           command: |
             apt-get update -y
-            apt-get install -y --no-install-recommends libgirepository1.0-dev
+            apt-get install -y --no-install-recommends libcairo2-dev libgirepository1.0-dev
 
             curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
             echo 'export PATH=$HOME/.poetry/bin:$PATH' >> $BASH_ENV
