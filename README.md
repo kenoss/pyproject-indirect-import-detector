@@ -35,7 +35,7 @@ Note that this tool is intended to use in the virtual environment created by `po
 poetry run pyproject-indirect-import-detector -v
 ```
 
-See also [CI config](.circleci/config.yml).
+See also [CI config](.circleci/config.yml), especially the job `check-indirect-import`.
 
 ### Configuration
 

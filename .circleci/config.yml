@@ -47,6 +47,18 @@ jobs:
           name: Lint
           command: |
             poetry run pysen run lint
+  # Self check.
+  check-indirect-import:
+    docker:
+      - image: python:3-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - poetry-install
+      - run:
+          name: Check indirect import
+          command: |
+            poetry run pyproject-indirect-import-detector -v
   test:
     parameters:
       python-version:
@@ -145,6 +157,7 @@ workflows:
   commit:
     jobs:
       - lint
+      - check-indirect-import
       - test:
           matrix:
             parameters:
@@ -180,7 +193,6 @@ workflows:
               only:
                 - master
     jobs:
-      - lint
       - test:
           matrix:
             parameters:
@@ -189,4 +201,3 @@ workflows:
           matrix:
             parameters:
               python-version: *python-versions
-      - build
