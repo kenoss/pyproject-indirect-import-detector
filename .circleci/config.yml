@@ -193,7 +193,6 @@ workflows:
               only:
                 - master
     jobs:
-      - lint
       - test:
           matrix:
             parameters:
@@ -202,4 +201,3 @@ workflows:
           matrix:
             parameters:
               python-version: *python-versions
-      - build
