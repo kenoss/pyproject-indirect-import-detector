@@ -69,3 +69,11 @@ This tool is designed to be used in CI.  So, runnable under `poetry run` is enou
 See the comment in [pyproject.toml](./pyproject.toml).
 I tried to make it runnable in old pythons, but the cost is high.
 This tool is designed to be used in CI.  So, this restriction is reasonable.
+
+## How to develop
+
+### How to release
+
+1. Bump version, PR and merge.
+2. `git tag <version>` then `git push origin <version>`.
+3. CI will pubish the package to PyPI: https://pypi.org/project/pyproject-indirect-import-detector/
