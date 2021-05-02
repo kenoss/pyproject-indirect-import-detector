@@ -18,7 +18,7 @@ pyproject-indirect-import-detector = "pyproject_indirect_import_detector.main:_m
 [tool.poetry.dependencies]
 # Installable with python >= 3.6, but runtime requires >= 3.9.  Because:
 #
-# - Old pythons lacks some libraries and methods.  So we want to use the latest python.
+# - Old pythons lacks some libraries and methods.  So, we want to use the latest python.
 # - Poetry see this constraint and check compatibility with the packages' one.
 #   For example, consider the following situation: the package A declare its python dependency `python = "^3.6"`.
 #   Then, `poetry add pyproject-indirect-import-detector` fails if the below constrait is `python = "^3.9"`.
