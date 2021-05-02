@@ -77,6 +77,31 @@ jobs:
           name: Test
           command: |
             poetry run pytest -v
+  test-extrenal-project-nitpick:
+    parameters:
+      python-version:
+        type: string
+      branch:
+        type: string
+    docker:
+      - image: python:<<parameters.python-version>>-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - run:
+          name: Prepare
+          command: |
+            git clone https://github.com/andreoliwa/nitpick work/andreoliwa/nitpick
+            cd work/andreoliwa/nitpick
+            git checkout <<parameters.branch>>
+            poetry add --dev ../../..
+            poetry install --extras lint --extras test --extras doc
+      - run:
+          name: Test
+          command: |
+            cd work/andreoliwa/nitpick
+            printf '\n[tool.pyproject-indirect-import-detector]\nexclude_modules = ["tests"]\n' >> pyproject.toml
+            poetry run pyproject-indirect-import-detector
   build:
     docker:
       - image: python:3-buster
@@ -124,6 +149,11 @@ workflows:
           matrix:
             parameters:
               python-version: *python-versions
+      - test-extrenal-project-nitpick:
+          matrix:
+            parameters:
+              python-version: *python-versions
+              branch: ["v0.26.0"]
       - build
   release:
     jobs:
