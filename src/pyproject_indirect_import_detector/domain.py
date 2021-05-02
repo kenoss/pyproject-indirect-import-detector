@@ -59,10 +59,10 @@ def _load_proj_to_modules(
         msg = f"`stdlib-list` does not support {python_version}"
         return Err(err).wrap_err(InvalidPythonVersionError(msg))
 
-    proj_to_modules_std = {"std": modules_std}
+    proj_to_modules_std = {"<std>": modules_std}
     proj_to_modules_dep = dict((proj, _get_modules(proj)) for proj in project_names)
     proj_to_modules_self = {self_project_name: self_module_names}
-    proj_to_modules_exclude = {"exclude": exclude_modules}
+    proj_to_modules_exclude = {"<exclude>": exclude_modules}
     proj_to_modules = {
         **proj_to_modules_std,
         **proj_to_modules_dep,
