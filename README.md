@@ -44,7 +44,7 @@ You can configure by `pyproject.toml` as the following:
 ```
 [tool.pyproject-indirect-import-detector]
 exclude_modules = [
-    "dataclass",             # If you use compat trick like https://github.com/PyCQA/isort/blob/5.8.0/isort/_future/__init__.py#L3-L7 .
+    "dataclasses",           # If you use compat trick like https://github.com/PyCQA/isort/blob/5.8.0/isort/_future/__init__.py#L3-L7 .
     "tests",                 # If your test suite make `tests` module importable and use it like https://github.com/andreoliwa/nitpick/blob/v0.26.0/tests/test_json.py#L6 .
     "dummy_module_for_test", # If you use dummy modules in tests like https://github.com/PyCQA/isort/blob/5.8.0/tests/unit/example_crlf_file.py#L1-L2 .
 ]
