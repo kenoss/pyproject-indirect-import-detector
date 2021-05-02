@@ -66,6 +66,7 @@ paths = ["src"]
 
 [tool.pyproject-indirect-import-detector]
 exclude_modules = [
-    "a", # For test; dummy module.
-    "b", # Ditto.
+    "hoge", # For test; dummy module.
+    "a",    # Ditto.
+    "b",    # Ditto.
 ]
