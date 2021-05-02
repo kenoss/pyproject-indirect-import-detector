@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pyproject-indirect-import-detector"
-version = "0.1.0a1"
+version = "0.1.0"
 description = "CI tool to detect indirect import"
 authors = ["keno <keno.ss57@gmail.com>"]
 license = "MIT"
