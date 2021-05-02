@@ -11,6 +11,20 @@ license = "MIT"
 packages = [
     {from = "src", include = "pyproject_indirect_import_detector"},
 ]
+readme = "README.md"
+repository = "https://github.com/kenoss/pyproject-indirect-import-detector"
+keywords = [
+    "python3",
+    "linter",
+    "styleguide",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Libraries",
+]
 
 [tool.poetry.scripts]
 pyproject-indirect-import-detector = "pyproject_indirect_import_detector.main:_main"
