@@ -1,10 +1,10 @@
 Checking 2 files... [31mNG[0m
 
 Error:
-    tests/unit/example_crlf_file.py:1: import b
+    tests/unit/example_crlf_file.py:2: import b
     b is imported, but not in dependency.
 
 Error:
-    tests/unit/example_crlf_file.py:2: import a
+    tests/unit/example_crlf_file.py:3: import a
     a is imported, but not in dependency.
 

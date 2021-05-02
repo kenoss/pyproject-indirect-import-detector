@@ -1,5 +1,6 @@
-import b
-import a
+# flake8: noqa
+import b  # isort: skip
+import a  # isort: skip
 
 
 def func():
