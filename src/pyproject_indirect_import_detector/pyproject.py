@@ -72,7 +72,11 @@ class _PyProject:
         return packages
 
     def _exclude_modules(self) -> List[str]:
-        return _dict_rec_get(self._t, ["tool", "pyproject-indirect-import-detector", "exclude_modules"], [])
+        modules = _dict_rec_get(self._t, ["tool", "pyproject-indirect-import-detector", "exclude_modules"], [])
+        assert type(modules) is list
+        for module in modules:
+            assert type(module) is str
+        return cast(List[str], modules)
 
     def base_python_version(self) -> Result[str, InvalidPythonVersionError]:
         python_version_constraint = _dict_rec_get(self._t, ["tool", "poetry", "dependencies", "python"], None)
