@@ -1,0 +1,6 @@
+Checking 4 files... [31mNG[0m
+
+Error:
+    src/hoge/__main__.py:1: import PIL
+    PIL is imported, but not in dependency.
+

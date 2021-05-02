@@ -11,6 +11,7 @@
 Indirect import is bad.
 
 - The biggest reason is requirements are not protected by [semantic versioning](https://semver.org/).
+- [Tests cannot check import-problem correctly](tests/integration_test/case/ng_test_cannot_check_import_problem/README.md).
 - Virtual environment is not strictly synced with `pyproject.toml` nor `poetry.lock` by `poetry`, so far.  It is possible that you delete a dependency but it still remains in the virtual environment.  This means, tests can accidentally pass.
 - FYI, indirect import is not allowed in rust/cargo.
 
