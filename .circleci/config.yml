@@ -125,7 +125,7 @@ jobs:
           name: Check if git tag name is appropriate for package version
           command: |
             tag=$CIRCLE_TAG
-            version=$(poetry run python -c 'from importlib.metadata import Distribution; print(Distribution.from_name("pyproject-indirect-import-detector").version)')
+            version=$(poetry run python -c 'import toml; print(toml.load("pyproject.toml")["tool"]["poetry"]["version"])')
             test "$tag" = "$version"
   deploy:
     docker:
