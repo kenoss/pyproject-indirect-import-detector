@@ -71,6 +71,9 @@ class _PyProject:
                     if ("from" in x) and ("include" in x)]
         return packages
 
+    def _exclude_modules(self) -> List[str]:
+        return _dict_rec_get(self._t, ["tool", "pyproject-indirect-import-detector", "exclude_modules"], [])
+
     def base_python_version(self) -> Result[str, InvalidPythonVersionError]:
         python_version_constraint = _dict_rec_get(self._t, ["tool", "poetry", "dependencies", "python"], None)
         if python_version_constraint is None:
@@ -112,6 +115,7 @@ class _PyProject:
             self._module_names(),
             self.dependencies(dev),
             python_version,
+            self._exclude_modules(),
         )
         if proj_to_modules_.is_err():
             return Err(proj_to_modules_.unwrap_err())

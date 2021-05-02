@@ -51,6 +51,7 @@ def _load_proj_to_modules(
     self_module_names: List[str],
     project_names: List[str],
     python_version: str,
+    exclude_modules: List[str],
 ) -> Result[dict[str, List[str]], InvalidPythonVersionError]:  # type: ignore  # reason: dict
     try:
         modules_std = stdlib_list(python_version)
@@ -61,5 +62,11 @@ def _load_proj_to_modules(
     proj_to_modules_std = {"std": modules_std}
     proj_to_modules_dep = dict((proj, _get_modules(proj)) for proj in project_names)
     proj_to_modules_self = {self_project_name: self_module_names}
-    proj_to_modules = {**proj_to_modules_std, **proj_to_modules_dep, **proj_to_modules_self}
+    proj_to_modules_exclude = {"exclude": exclude_modules}
+    proj_to_modules = {
+        **proj_to_modules_std,
+        **proj_to_modules_dep,
+        **proj_to_modules_self,
+        **proj_to_modules_exclude,
+    }
     return Ok(proj_to_modules)
