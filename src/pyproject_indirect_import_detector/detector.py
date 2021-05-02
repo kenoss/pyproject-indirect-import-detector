@@ -3,12 +3,7 @@ import logging as _logging
 # noqa idiom
 if True:
     logger = _logging.getLogger(__name__)
-    handler = _logging.StreamHandler()
-    _level = _logging.WARNING
-    handler.setLevel(_level)
-    logger.setLevel(_level)
-    logger.addHandler(handler)
-    logger.propagate = False
+    logger.addHandler(_logging.NullHandler())
 
 
 import ast
