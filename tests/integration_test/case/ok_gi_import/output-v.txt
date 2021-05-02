@@ -1,0 +1,4 @@
+Checking 2 files... [32mOK[0m
+
+[32m[OK][0m src/hoge/__init__.py
+[32m[OK][0m src/hoge/__main__.py

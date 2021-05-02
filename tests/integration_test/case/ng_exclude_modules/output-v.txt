@@ -1,0 +1,13 @@
+Checking 2 files... [31mNG[0m
+
+[32m[OK][0m src/hoge/__init__.py
+[31m[NG][0m tests/unit/example_crlf_file.py
+
+Error:
+    tests/unit/example_crlf_file.py:2: import b
+    b is imported, but not in dependency.
+
+Error:
+    tests/unit/example_crlf_file.py:3: import a
+    a is imported, but not in dependency.
+
