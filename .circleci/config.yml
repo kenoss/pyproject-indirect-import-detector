@@ -89,7 +89,7 @@ jobs:
           name: Test
           command: |
             poetry run pytest -v
-  test-extrenal-project-nitpick:
+  test-external-project-nitpick:
     parameters:
       python-version:
         type: string
@@ -162,7 +162,7 @@ workflows:
           matrix:
             parameters:
               python-version: *python-versions
-      - test-extrenal-project-nitpick:
+      - test-external-project-nitpick:
           matrix:
             parameters:
               python-version: *python-versions
