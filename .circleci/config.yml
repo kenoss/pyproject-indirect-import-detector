@@ -89,7 +89,42 @@ jobs:
           name: Test
           command: |
             poetry run pytest -v
-  test-extrenal-project-nitpick:
+  test-external-project-isort:
+    parameters:
+      python-version:
+        type: string
+      branch:
+        type: string
+    docker:
+      - image: python:<<parameters.python-version>>-buster
+    steps:
+      - checkout
+      - setup-python-environment
+      - run:
+          name: Prepare
+          command: |
+            git clone https://github.com/PyCQA/isort work/PyCQA/isort
+            cd work/PyCQA/isort
+            git checkout <<parameters.branch>>
+            poetry add --dev ../../..
+      - run:
+          name: Test
+          command: |
+            cd work/PyCQA/isort
+            cat \<< EOS >> pyproject.toml
+
+            [tool.pyproject-indirect-import-detector]
+            exclude_modules = [
+                "dataclasses",     # Compatibility.
+                "pylama",          # `isort` provides a plugin of pylama, but does not depend on it.
+                "mypy_extensions", # `if TYPE_CHECKING`
+                "numpy",           # Vendered `toml` imports `numpy`.  Not a good code.
+                "a",               # Dummy in tests.
+                "b",               # Dummy in tests.
+            ]
+            EOS
+            poetry run pyproject-indirect-import-detector
+  test-external-project-nitpick:
     parameters:
       python-version:
         type: string
@@ -112,7 +147,11 @@ jobs:
           name: Test
           command: |
             cd work/andreoliwa/nitpick
-            printf '\n[tool.pyproject-indirect-import-detector]\nexclude_modules = ["tests"]\n' >> pyproject.toml
+            cat \<< EOS >> pyproject.toml
+
+            [tool.pyproject-indirect-import-detector]
+            exclude_modules = ["tests"]
+            EOS
             poetry run pyproject-indirect-import-detector
   build:
     docker:
@@ -162,7 +201,12 @@ workflows:
           matrix:
             parameters:
               python-version: *python-versions
-      - test-extrenal-project-nitpick:
+      - test-external-project-isort:
+          matrix:
+            parameters:
+              python-version: *python-versions
+              branch: ["7e43b80"]
+      - test-external-project-nitpick:
           matrix:
             parameters:
               python-version: *python-versions
