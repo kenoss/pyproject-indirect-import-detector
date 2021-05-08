@@ -147,7 +147,11 @@ jobs:
           name: Test
           command: |
             cd work/andreoliwa/nitpick
-            printf '\n[tool.pyproject-indirect-import-detector]\nexclude_modules = ["tests"]\n' >> pyproject.toml
+            cat \<< EOS >> pyproject.toml
+
+            [tool.pyproject-indirect-import-detector]
+            exclude_modules = ["tests"]
+            EOS
             poetry run pyproject-indirect-import-detector
   build:
     docker:
