@@ -36,14 +36,14 @@ First, assume that
       Requirement in pyproject.toml
 ```
 
-Consider a case that the authers of A refactor A and publish A 1.1.0 and this does not depends on B anymore.  Then,
+Consider the case that the authers of A refactor A and publish A 1.1.0 and this does not depends on B anymore.  Then,
 
 - If X is a library, user of library X can face `ModuleNotFoundError`.
 - If X is an application and you're using a "blessed" lockfile, you'll get no errors.
 - If X is an application and you're not lucky, you'll get `ModuleNotFoundError`.
 
 The second example is almost the same to the first.
-Consider a case that the authers of A refactor A and publish A 1.1.0 and this depends on B `^2` and B has breaking chanegs.
+Consider the case that the authers of A refactor A and publish A 1.1.0 and this depends on B `^2` and B has breaking chanegs.
 Then, you may not have an explicit errors but the behavior can differ from the expected.
 
 It's horrible, isn't it?
