@@ -15,6 +15,42 @@ Indirect import is bad.
 - Virtual environment is not strictly synced with `pyproject.toml` nor `poetry.lock` by `poetry`, so far.  It is possible that you delete a dependency but it still remains in the virtual environment.  This means, tests can accidentally pass.
 - FYI, indirect import is not allowed in rust/cargo.
 
+We'll describe the first reason a little more.  There are two examples here.
+
+First, assume that
+
+- You are developping a library or application X.
+- X depends on a library A `^1` and indirectly depends on a library B `^1`, meaning, X imports B but does not declare the dependency in `pyproject.toml`.
+- The latest A is version 1.0.0 and it depends on B 1.0.0.
+
+```
+      Indirect import; imported but no requirement in pyproject.toml
+      |
+  +--------> B
+  |          ^
+  |          |
+  |          | ---+
+  |          |    |
+  X -------> A    Requirement in pyproject.toml
+      |
+      Requirement in pyproject.toml
+```
+
+Consider the case that the authers of A refactor A and publish A 1.1.0 and this does not depends on B anymore.  Then,
+
+- If X is a library, user of library X can face `ModuleNotFoundError`.
+- If X is an application and you're using a "blessed" lockfile, you'll get no errors.
+- If X is an application and you're not lucky, you'll get `ModuleNotFoundError`.
+
+The second example is almost the same to the first.
+Consider the case that the authers of A refactor A and publish A 1.1.0 and this depends on B `^2` and B has breaking chanegs.
+Then, you may not have an explicit errors but the behavior can differ from the expected.
+
+It's horrible, isn't it?
+The most reliable and simple way is maintaining dependencies correctly.
+Because the resource of human brain is limited and most precious, this should be checked in CI.
+`pyproject-indirect-import-detector` is a tool for this purpose.
+
 ## Limitation
 
 Currently, this tool only suuport `pyproject.toml` using `poetry`.
@@ -50,6 +86,8 @@ exclude_modules = [
     "dummy_module_for_test", # If you use dummy modules in tests like https://github.com/PyCQA/isort/blob/5.8.0/tests/unit/example_crlf_file.py#L1-L2 .
 ]
 ```
+
+You can find more examples in [CI config](.circleci/config.yml), the jobs `test-external-project-*`.
 
 ## FAQ
 
