@@ -51,6 +51,8 @@ exclude_modules = [
 ]
 ```
 
+You can find more examples in [CI config](.circleci/config.yml), the jobs `test-external-project-*`.
+
 ## FAQ
 
 ### It failes with not reasonable errors.
