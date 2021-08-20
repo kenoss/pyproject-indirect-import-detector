@@ -65,8 +65,10 @@ py_version = "py38"
 paths = ["src"]
 
 [tool.pyproject-indirect-import-detector]
+exclude_projects = ["dataclasses"]
 exclude_modules = [
-    "hoge", # For test; dummy module.
-    "a",    # Ditto.
-    "b",    # Ditto.
+    "dataclasses", # For test, corresponding "dataclasses" in `exclude_projects`.
+    "hoge",        # For test; dummy module.
+    "a",           # Ditto.
+    "b",           # Ditto.
 ]

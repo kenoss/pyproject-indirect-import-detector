@@ -80,12 +80,28 @@ You can configure by `pyproject.toml` as the following:
 
 ```
 [tool.pyproject-indirect-import-detector]
+exclude_projects = [
+    "dataclasses",           # If you use compat trick like https://github.com/kenoss/pyproject-indirect-import-detector/tree/main/tests/integration_test/case/ok_exclude_projects
+]
 exclude_modules = [
-    "dataclasses",           # If you use compat trick like https://github.com/PyCQA/isort/blob/5.8.0/isort/_future/__init__.py#L3-L7 .
+    "dataclasses",           # Corresponding "dataclasses" in `exclude_projects`.
     "tests",                 # If your test suite make `tests` module importable and use it like https://github.com/andreoliwa/nitpick/blob/v0.26.0/tests/test_json.py#L6 .
     "dummy_module_for_test", # If you use dummy modules in tests like https://github.com/PyCQA/isort/blob/5.8.0/tests/unit/example_crlf_file.py#L1-L2 .
 ]
 ```
+
+- `tool.pyproject-indirect-import-detector.exclude_projects`
+
+  Omit searching the distributions corresponding designated package names.
+  Notice that this also prevent making "project to modules map".  You should also specify `exclude_modules` manually.
+  For example, see tests [OK](tests/integration_test/case/ok_exclude_projects), [NG](tests/integration_test/case/ng_exclude_projects).
+  
+- `tool.pyproject-indirect-import-detector.exclude_modules`
+
+  Omit checks for the designated modules.
+  For example, see tests [OK](tests/integration_test/case/ok_exclude_modules), [NG](tests/integration_test/case/ng_exclude_modules).
+
+---
 
 You can find more examples in [CI config](.circleci/config.yml), the jobs `test-external-project-*`.
 
