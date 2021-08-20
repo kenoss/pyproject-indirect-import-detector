@@ -66,6 +66,13 @@ class _PyProject:
                     if ("from" in x) and ("include" in x)]
         return packages
 
+    def _exclude_projects(self) -> List[str]:
+        projects = _dict_rec_get(self._t, ["tool", "pyproject-indirect-import-detector", "exclude_projects"], [])
+        assert type(projects) is list
+        for module in projects:
+            assert type(module) is str
+        return cast(List[str], projects)
+
     def _exclude_modules(self) -> List[str]:
         modules = _dict_rec_get(self._t, ["tool", "pyproject-indirect-import-detector", "exclude_modules"], [])
         assert type(modules) is list
@@ -114,6 +121,7 @@ class _PyProject:
             self._module_names(),
             self.dependencies(dev),
             python_version,
+            self._exclude_projects(),
             self._exclude_modules(),
         )
         if proj_to_modules_.is_err():

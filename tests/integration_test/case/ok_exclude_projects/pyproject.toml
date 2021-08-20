@@ -17,3 +17,7 @@ python = "^3.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+
+[tool.pyproject-indirect-import-detector]
+exclude_projects = ["dataclasses"]
+exclude_modules = ["dataclasses"]
